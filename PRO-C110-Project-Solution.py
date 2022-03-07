@@ -1,62 +1,62 @@
-# To Capture Frame
+# Para capturar el fotograma
 import cv2
 
-# To process image array
+# Para procesar la matriz de la imagen
 import numpy as np
 
-# To Load the Pre-trained Model
+# Para cargar el modelo preentrenado
 import tensorflow as tf
 
-# Attaching Cam indexed as 0, with the application software
+# Adjuntando el índice de la cámara como 0 con la aplicación del software
 camera = cv2.VideoCapture(0)
 
-# Loading the pre-trained model : keras_model.h5
+# Cargando el modelo preentrenado: keras_model.h5
 mymodel = tf.keras.models.load_model('keras_model.h5')
 
-# Infinite loop
+# Bucle infinito
 while True:
 
-	# Reading / Requesting a Frame from the Camera 
+	# Leyendo/Solicitando un fotograma de la cámara
 	status , frame = camera.read()
 
-	# if we were sucessfully able to read the frame
+	# Si somos capaces de leer exitosamente el fotograma
 	if status:
 
-		# Flip the frame
+		# Voltear la imagen
 		frame = cv2.flip(frame , 1)
 
-		# Resize the frame
+		# Redimensionar el fotograma
 		resized_frame = cv2.resize(frame , (224,224))
 
-		# Expanding the dimension of the array along axis 0
+		# Expandir las dimensiones de la matriz a lo largo del eje 0
 		resized_frame = np.expand_dims(resized_frame , axis = 0)
 
-		# Normalizing for easy processing
+		# Normalizar para facilitar el proceso
 		resized_frame = resized_frame / 255
 
-		# Getting predictions from the model
+		# Obteniendo predicciones del modelo
 		predictions = mymodel.predict(resized_frame)
 
-		# Converting the data in the array to percentage confidence 
+		# Conviritiendo los datos de la matriz en porcentajes de confianza
 		rock = int(predictions[0][0]*100)
 		paper = int(predictions[0][1]*100)
 		scissor = int(predictions[0][2]*100)
 
-		# printing percentage confidence
-		print(f"Rock: {rock} %, Paper: {paper} %, Scissor: {scissor} %")
+		# Imprimiendo los porcentajes de confianza
+		print(f"Piedra: {rock}%, Papel: {paper}%, Tijeras: {scissor}%")
 
-		# displaying the frames captured
-		cv2.imshow('feed' , frame)
+		# Mostrando los fotogramas capturados
+		cv2.imshow('Alimentar' , frame)
 
-		# waiting for 1ms
+		# Esperando 1ms
 		code = cv2.waitKey(1)
 		
-		# if space key is pressed, break the loop
+		# Si se preciona la barra espaciadora, romper el bucle
 		if code == 32:
 			break
 
-# release the camera from the application software
+# Liberar la cámara de la aplicación del software
 camera.release()
 
-# close the open window
+# Cerrar la ventana abierta
 cv2.destroyAllWindows()
