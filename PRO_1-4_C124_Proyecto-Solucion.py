@@ -1,7 +1,7 @@
 # Para capturar el fotograma
 import cv2
 
-# Para procesar la matriz de la imagen
+# Para procesar la arreglo de la imagen
 import numpy as np
 
 # Para cargar el modelo preentrenado
@@ -28,7 +28,7 @@ while True:
 		# Redimensionar el fotograma
 		resized_frame = cv2.resize(frame , (224,224))
 
-		# Expandir las dimensiones de la matriz a lo largo del eje 0
+		# Expandir las dimensiones de la arreglo a lo largo del eje 0
 		resized_frame = np.expand_dims(resized_frame , axis = 0)
 
 		# Normalizar para facilitar el proceso
@@ -37,7 +37,7 @@ while True:
 		# Obteniendo predicciones del modelo
 		predictions = mymodel.predict(resized_frame)
 
-		# Conviritiendo los datos de la matriz en porcentajes de confianza
+		# Conviritiendo los datos de la arreglo en porcentajes de confianza
 		rock = int(predictions[0][0]*100)
 		paper = int(predictions[0][1]*100)
 		scissor = int(predictions[0][2]*100)
@@ -55,7 +55,7 @@ while True:
 		if code == 32:
 			break
 
-# Liberar la cámara de la aplicación del software
+# Liberar la cámara de la app del software
 camera.release()
 
 # Cerrar la ventana abierta
